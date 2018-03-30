@@ -1,4 +1,4 @@
-// GGEZ 1.1 minimxl 3-30-18
+// GGEZ 1.2 minimxl 3-30-18
 // Use: Quickly building and executing apps.
 // Note: Made in a hacky way.
 
@@ -14,39 +14,43 @@ void checkHelp() {
   std::cout << "execution of applications for those new" << std::endl;
   std::cout << "to C++ programming." << std::endl;
   std::cout << std::endl;
-  std::cout << "Usage: ggez <nameOfFileWithoutExtension>" << std::endl;
+  std::cout << "Note: The only supported format is .cpp!" << std::endl;
+  std::cout << std::endl;
+  std::cout << "Usage: ggez /path/to/file.cpp" << std::endl;
 }
 
 
 int checkFile(char* argv[]) {
-  // Add .cpp to the arg to reduce arg typing time.
-  std::string fname = std::string(argv[1]) + ".cpp";
   // Assure file exists.
-  std::ifstream file(fname);
+  std::ifstream file(argv[1]);
   if (!file) {
   // If it doesn't exist, exit.
     std::cout << "That file doesn't exist. :(" << std::endl;
-    exit(EXIT_FAILURE);
+    std::exit(EXIT_FAILURE);
   }
   return 0;
 }
 
 int buildFile(char* argv[]) {
+  // Variables for building decision and warning decision.
   int buildStatus;
   std::string warnDecision;
+  // Variables for storing path and file name.
+  std::string absoPath = std::string(argv[1]);
+  std::string fileName = absoPath.substr(0, absoPath.find("."));
 
   std::cout << "Use warnings? (Y/N) ";
   std::cin >> warnDecision;
 
   if (warnDecision == "Y") {
     // Build file with warnings and store output in variable.
-    buildStatus = system((std::string("g++ -Wall -Wextra -Wpedantic ") + argv[1] + (".cpp -o ") + argv[1] + (".o")).c_str());
+    buildStatus = std::system((std::string("g++ -Wall -Wextra -Wpedantic ") + fileName + (".cpp -o ") + fileName + (".o")).c_str());
   } else if (warnDecision == "N") {
       // Build file and store output in variable.
-      buildStatus = system((std::string("g++ ") + argv[1] + (".cpp -o ") + argv[1] + (".o")).c_str());
+      buildStatus = std::system((std::string("g++ ") + fileName + (".cpp -o ") + fileName + (".o")).c_str());
     } else {
           std::cout << "Invalid input. :(" << std::endl;
-        exit(EXIT_FAILURE);
+        std::exit(EXIT_FAILURE);
       }
   if (!buildStatus) {
     // If no output was recieved, all is good.
@@ -54,17 +58,21 @@ int buildFile(char* argv[]) {
   } else {
       // Otherwise, an error occured, exit.
         std::cout << "There was an issue. :(" << std::endl;
-      exit(EXIT_FAILURE);
+      std::exit(EXIT_FAILURE);
     }
   return 0;
 }
 
 int executeFile(char* argv[]) {
+  // Variables for storing path and file name.
+  std::string absoPath = std::string(argv[1]);
+  std::string fileName = absoPath.substr(0, absoPath.find("."));
+
     std::cout << "GGEZ is executing new file: " << std::endl;
   // Sleep for added executing suspense, haha.
   std::this_thread::sleep_for(std::chrono::seconds(2));
     std::cout << std::endl;
-  system((std::string("./") + argv[1] + (".o")).c_str());
+  std::system((std::string(fileName + (".o")).c_str()));
     std::cout << std::endl;
     std::cout << "GGEZ executed new file." << std::endl;
   return 0;

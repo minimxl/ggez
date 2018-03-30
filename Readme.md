@@ -13,11 +13,3 @@ To install GGEZ:
 to allow execution.
 - Optionally: Move the resulting file somewhere in
 your $PATH to allow usage like any other command.
-
--=-=-=-=-
-Changelog 1.1:
-- Added ability to use warnings.
-- Added return values to my functions.
-- Removed the use of namespace std.
-- Replaced unistd.h with thread and chrono.
-- Removed unused parameters in functions.
